@@ -22,6 +22,7 @@ import javax.swing.JPanel;
  */
 public class GameInterface extends JPanel {
 
+	// These will be assigned values in terms of pixels to cooperate with java.awt.Graphics2D
 	final static int WINDOW_HEIGHT;
 	final static int WINDOW_WIDTH;
 
@@ -32,18 +33,18 @@ public class GameInterface extends JPanel {
 	final static int RADIUS;
 
 	static {	
-
+		// Set default values for int variables relating to drawing window and board assets; in units of pixels.
 		WINDOW_HEIGHT = 720;
 		WINDOW_WIDTH = 720;
-		BOARD_SIZE = 6*WINDOW_HEIGHT/10;
+		BOARD_SIZE = 6*WINDOW_HEIGHT/10;                        // Boardsize is not fixed with respect to window size
 		TILE_SIZE = 75;
 		RADIUS = 40;
 
-		assert(WINDOW_HEIGHT == WINDOW_WIDTH);			//The window and board should be square		
-		assert(new File("resources/texture2.bmp").exists());
-		assert(new File("resources/texture3.bmp").exists());
+		assert(WINDOW_HEIGHT == WINDOW_WIDTH);                  // The window and board should be square		
+		assert(new File("resources/texture2.bmp").exists());    // Makes sure that required image files are present at launch
+		assert(new File("resources/texture3.bmp").exists());    // Image files must be specified and present in the specified directory to succeed
 
-		START_WIDTH = (WINDOW_WIDTH - BOARD_SIZE)/2 - WINDOW_WIDTH/TILE_SIZE;
+		START_WIDTH = (WINDOW_WIDTH - BOARD_SIZE)/2 - WINDOW_WIDTH/TILE_SIZE;     // The board shall be centred within the window
 		START_HEIGHT = (WINDOW_HEIGHT - BOARD_SIZE)/2 - WINDOW_HEIGHT/TILE_SIZE;			
 
 	}	
@@ -56,6 +57,7 @@ public class GameInterface extends JPanel {
 
 	/* (non-Javadoc)
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 * Wraps all drawing functions into one call.
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -83,14 +85,14 @@ public class GameInterface extends JPanel {
 		BufferedImage backImage;
 
 		try {		
-			backImage = ImageIO.read(new File("resources/texture2.bmp"));
-		} catch (IOException e) {			
+			backImage = ImageIO.read(new File("resources/texture2.bmp"));   // Image file must be specified (name and source directory) to be shown as a background
+		} catch (IOException e) {                                           // If image is removed from the directory, an error should be thrown
 			System.out.println("Error: Image files missing from resource");
 			e.printStackTrace();
 			return;
 		}
 
-		g2d.setPaint(new TexturePaint(backImage, new Rectangle(75,75)));		
+		g2d.setPaint(new TexturePaint(backImage, new Rectangle(75,75)));    // Then with the desired image, draw the background
 		g2d.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 	}
 
@@ -103,15 +105,15 @@ public class GameInterface extends JPanel {
 
 		BufferedImage boardImage;
 		try {
-			boardImage = ImageIO.read(new File("resources/texture3.bmp"));
-		} catch (IOException e) {
+			boardImage = ImageIO.read(new File("resources/texture3.bmp"));  // Image file must be specified (name and source directory) to be shown as a playing board
+		} catch (IOException e) {                                           // If image is removed from the directory, an error should be thrown
 			System.out.println("Error: image file missing from resources");
 			e.printStackTrace();
 			return;
 		}
 
 		g2d.setPaint(new TexturePaint(boardImage, new Rectangle(TILE_SIZE,TILE_SIZE)));
-		g2d.fillRect(START_WIDTH, START_HEIGHT, BOARD_SIZE, BOARD_SIZE);
+		g2d.fillRect(START_WIDTH, START_HEIGHT, BOARD_SIZE, BOARD_SIZE);    // Then with the desired image, draw the playing board image
 	}
 
 	/**
